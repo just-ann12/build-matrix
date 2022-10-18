@@ -4,7 +4,6 @@ import SettingsItem from "../SettingsItem";
 import CustomButton from "../shared/CustomButton";
 
 const MatrixForm = () => {
-  // create settings state with columns, rows, cells properties
 
   const [settings, setSettings] = useState({
     columns: 0,
@@ -15,25 +14,25 @@ const MatrixForm = () => {
     <div className="matrixCreator">
       <h1 className="title">Matrix builder</h1>
       <form>
-        {/* move to new component SettingsItem  label onChange={(e) => setSettings({...settings, columns: e.target.value})}*/}
+        
         <div className="inputValues-wrap">
           <SettingsItem
             label="Set columns"
             value={settings.columns}
             onChange={(e) =>
-              setSettings({ ...settings, columns: e.target.value })
+              setSettings({ ...settings, columns: +e.target.value })
             }
           />
           <SettingsItem
             label="Set rows"
             value={settings.rows}
-            onChange={(e) => setSettings({ ...settings, rows: e.target.value })}
+            onChange={(e) => setSettings({ ...settings, rows: +e.target.value })}
           />
           <SettingsItem
             label="Set cells"
             value={settings.cells}
             onChange={(e) =>
-              setSettings({ ...settings, cells: e.target.value })
+              setSettings({ ...settings, cells: +e.target.value })
             }
           />
         </div>

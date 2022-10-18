@@ -1,9 +1,9 @@
 import "./index.scss";
 
-const CustomButton = (props) => {
+const CustomButton = ({onClick, title}) => {
   return (
-    <button className="btn" onClick={props.onClick}>
-      {props.title}
+    <button className="btn" onClick={onClick}>
+      {title}
     </button>
   );
 };

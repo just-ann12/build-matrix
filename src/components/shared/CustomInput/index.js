@@ -1,6 +1,6 @@
 import './index.scss'
-const CustomInput = ({ inputNumber, onChange }) => {
+const CustomInput = ({type='text', value, onChange }) => {
     
-    return <input value={inputNumber} onChange={onChange}/>
+    return <input type={type} value={value} onChange={onChange}/>
 }
 export default CustomInput
