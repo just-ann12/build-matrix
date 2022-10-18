@@ -1,4 +1,4 @@
-@import '..\utils\styles\colors.scss';
+//@import '..\utils\styles\colors.scss';
 .matrixCreator {
     width: 400px;
     display: flex;
@@ -12,15 +12,16 @@
         text-align: center;
         margin-bottom: 15px;
         font-size: 60px;
-        color: $yellow;
+        color: rgb(252, 244, 29);
+    }
+    .mainPageBtn {
+        background-color: rgb(119, 229, 246);
+        color: rgb(247, 60, 166);
     }
     .btn-wrap {
-        display: flex;
-        justify-content: center;
-        
-        .mainPageBtn {
-            background-color: $lightBlue;
-            color: $pink;
-        }
+        margin-top: 15px;
     }
+}
+.invisible {
+    display: none;
 }
