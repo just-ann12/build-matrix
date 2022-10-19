@@ -1,10 +1,12 @@
 import "./index.scss";
 
-const CustomButton = ({onClick, title}) => {
+const CustomButton = ({ className, onClick, title }) => {
   return (
-    <button className="btn" onClick={onClick}>
-      {title}
-    </button>
+    <div className="btn-wrap">
+      <button className={className} onClick={onClick}>
+        {title}
+      </button>
+    </div>
   );
 };
 

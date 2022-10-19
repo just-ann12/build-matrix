@@ -1,11 +1,14 @@
-@import '.././utils/styles/colors.scss';
+//@import '.././utils/styles/colors.scss';
 
-.btn {
-    padding: 15px 20px;
-    border: none;
-    border-radius: 8px;
-    font-family: 'Roboto', sans-serif;
-    font-size: 20px;
-    font-weight: 500;
-    background-color: $lightBlue;
+.btn-wrap {
+    display: flex;
+    justify-content: center;
+    button {
+        padding: 15px 20px;
+        border: none;
+        border-radius: 8px;
+        font-family: 'Roboto', sans-serif;
+        font-size: 20px;
+        font-weight: 500;
+    }
 }

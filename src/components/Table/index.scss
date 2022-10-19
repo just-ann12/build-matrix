@@ -1,0 +1,36 @@
+
+.matrix-wrap {
+    font-size: 20px;
+    color: #000;
+    .btn-wrap{  
+        margin-bottom: 25px;
+    }
+    .addRowBtn {
+        background-color: rgb(252, 244, 29);
+        color: rgb(10, 73, 15);
+    }
+    .matrix {
+        tbody tr th,
+        thead tr th{
+            border-radius: 6px;
+            padding: 12px;
+        }
+        tbody tr th{
+            background-color: rgb(42, 192, 221);
+        }
+        tbody tr th:nth-last-child(2) {
+            background-color: rgb(25, 146, 97);
+            color: #fff;
+        }
+        tbody tr th:last-child {
+            background-color: transparent;
+        }
+        tbody tr:last-child th{
+            background-color: rgb(25, 146, 97);
+            color: #fff;
+        }
+        tbody tr th:first-child {
+            background-color: transparent;
+        }
+    }
+}
