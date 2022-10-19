@@ -1,62 +1,49 @@
 import "./index.scss";
-import { useState } from "react";
 import SettingsItem from "../SettingsItem";
 import CustomButton from "../shared/CustomButton";
-import Table from "../Table";
-const MatrixForm = () => {
-  const [isClicked, setClick] = useState(false);
-
-  const [settings, setSettings] = useState({
-    columns: 0,
-    rows: 0,
-    cells: 0,
-  });
-
+import { nanoid } from "nanoid";
+const MatrixForm = ({ onCreateMatrix, setClick, settings, onSetSettings }) => {
   const handleClick = (e) => {
     e.preventDefault();
-    setClick(true);
+    generateMatrix(settings.columns, settings.rows);
   };
+
   const generateMatrix = (columns, rows) => {
     let matrix = [];
-
     for (let i = 0; i < rows; i++) {
-      const row = [...new Array(columns)].map(() =>
-        Math.round(100 - 0.5 + Math.random() * (1000 - 100 + 1))
-      );
-      matrix.push(row);
-      console.log(matrix);
+      const row = Array(columns)
+        .fill(null)
+        .map(() => Math.round(100 - 0.5 + Math.random() * (1000 - 100 + 1)));
+      const customRow = row.map((val) => ({ id: nanoid(), value: val }));
+      matrix.push(customRow);
     }
-    return matrix;
-  };
-
-  const createHeadingOfMatrix = (columns) => {
-    return Array.from({ length: columns }, (_, index) => index + 1);
+    onCreateMatrix(matrix);
   };
 
   return (
     <div className="matrixCreator">
       <h1 className="title">Matrix builder</h1>
-      <form>
+      <div>
         <div className="inputValues-wrap">
           <SettingsItem
             label="Set columns"
             value={settings.columns}
             onChange={(e) =>
-              setSettings({ ...settings, columns: +e.target.value })
+              onSetSettings({ ...settings, columns: +e.target.value })
             }
           />
           <SettingsItem
             label="Set rows"
             value={settings.rows}
             onChange={(e) =>
-              setSettings({ ...settings, rows: +e.target.value })
+              onSetSettings({ ...settings, rows: +e.target.value })
             }
           />
           <SettingsItem
             label="Set cells"
             value={settings.cells}
             onChange={(e) =>
-              setSettings({ ...settings, cells: +e.target.value })
+              onSetSettings({ ...settings, cells: +e.target.value })
             }
           />
         </div>
@@ -67,13 +54,7 @@ const MatrixForm = () => {
             onClick={handleClick}
           />
         </div>
-      </form>
-      {isClicked && (
-        <Table
-          heading={createHeadingOfMatrix(settings.columns)}
-          body={generateMatrix(settings.columns, settings.rows)}
-        />
-      )}
+      </div>
     </div>
   );
 };
