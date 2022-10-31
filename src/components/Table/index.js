@@ -1,27 +1,24 @@
+import { useDispatch, useSelector } from "react-redux";
 import CustomButton from "../shared/CustomButton";
 import "./index.scss";
 import TableRow from "./TableRow";
-import RowAverageVal from "./RowAverageVal";
-import { nanoid } from "nanoid";
+import AverageRow from "./RowAverageVal";
+import { addRow } from "../../store/matrix-reducer/actions";
+import {
+  getMatrixDataSelector,
+  getMatrixSettingsSelector,
+} from "../../store/matrix-reducer/selectors";
+import { newValue } from "../../utils/helpers/newValue";
 
-const Table = ({
-  data,
-  setData,
-  closestCellsAmount,
-  onSearchClosestCells,
-  closestCellsIds,
-}) => {
-  const handleRowAdding = (row) => setData([...data, row]);
-  const setNewMatrixData = (data) => setData(data);
+const Table = () => {
+  const dispatch = useDispatch();
 
-  const addRow = (data) => {
-    const row = Array(data[0].length)
-      .fill(null)
-      .map(() => ({
-        id: nanoid(),
-        value: Math.round(100 - 0.5 + Math.random() * (1000 - 100 + 1)),
-      }));
-    handleRowAdding(row);
+  const settings = useSelector(getMatrixSettingsSelector);
+  const data = useSelector(getMatrixDataSelector);
+
+  const handleAddRow = () => {
+    const row = Array(settings.columns).fill(null).map(newValue);
+    dispatch(addRow(row));
   };
 
   return (
@@ -30,7 +27,7 @@ const Table = ({
         <CustomButton
           className="addRowBtn"
           title="Add row"
-          onClick={() => addRow(data)}
+          onClick={handleAddRow}
         />
       </div>
       <table className="matrix">
@@ -45,18 +42,9 @@ const Table = ({
         </thead>
         <tbody>
           {data.map((row, index) => (
-            <TableRow
-              dataMatrix={data}
-              row={row}
-              closestCellsAmount={closestCellsAmount}
-              key={index}
-              rowNumber={index + 1}
-              onSearchClosestCells={onSearchClosestCells}
-              closestCellsIds={closestCellsIds}
-              setNewMatrixData={setNewMatrixData}
-            />
+            <TableRow row={row} key={index} index={index} />
           ))}
-          <RowAverageVal data={data} />
+          <AverageRow />
         </tbody>
       </table>
     </div>

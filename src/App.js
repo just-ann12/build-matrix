@@ -1,37 +1,17 @@
+import { useSelector } from "react-redux";
 import "./utils/styles/main.scss";
 import MatrixForm from "./components/MatrixForm";
-import { useState } from "react";
 import Table from "./components/Table";
+import { getMatrixDataSelector } from "./store/matrix-reducer/selectors";
 
 const App = () => {
-  const [settings, setSettings] = useState({
-    columns: 0,
-    rows: 0,
-    cells: 0,
-  });
-  const [data, setData] = useState([]);
-  const [closestCellsIds, setClosestCellsIds] = useState([]);
-
-  const handleMatrixCreate = (data) => setData(data);
-  const handleSearchClosestIds = (ids) => setClosestCellsIds(ids);
+  const data = useSelector(getMatrixDataSelector);
 
   return (
     <div className="App">
       <div className="wrap">
-        <MatrixForm
-          settings={settings}
-          onSetSettings={setSettings}
-          onCreateMatrix={handleMatrixCreate}
-        />
-        {!!data.length && (
-          <Table
-            data={data}
-            setData={setData}
-            closestCellsAmount={settings.cells}
-            onSearchClosestCells={handleSearchClosestIds}
-            closestCellsIds={closestCellsIds}
-          />
-        )}
+        <MatrixForm />
+        {!!data.length && <Table />}
       </div>
     </div>
   );

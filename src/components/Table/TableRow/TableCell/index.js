@@ -1,30 +1,34 @@
+import { useMemo } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { getCellPersentage } from "../../../../utils/helpers/array";
 import { searchClosestCells } from "../../../../utils/helpers/search-closest-cells";
 import { increaseMatrixCellVal } from "../../../../utils/helpers/increment-cell";
-import { useMemo } from "react";
+import { setClosestCellIds } from "../../../../store/matrix-reducer/actions";
+import {
+  getClosestCellIdsSelector,
+  getMatrixDataSelector,
+  getMatrixSettingsSelector,
+} from "../../../../store/matrix-reducer/selectors";
+import { setMatrix } from "../../../../store/matrix-reducer/actions";
+const TableCell = ({ data, row, isPercentageMode }) => {
+  const dispatch = useDispatch();
 
-const TableCell = ({
-  data,
-  row,
-  dataMatrix,
-  closestCellsAmount,
-  onSearchClosestCells,
-  closestCellsIds,
-  setNewMatrixData,
-  isPercentageMode,
-}) => {
+  const settings = useSelector(getMatrixSettingsSelector);
+  const dataMatrix = useSelector(getMatrixDataSelector);
+  const closestCellIds = useSelector(getClosestCellIdsSelector);
+
   const cellRender = isPercentageMode
     ? `${getCellPersentage(row, data.value)}%`
     : data.value;
 
-  const handleEnterMouse = (matrix, amount, id) => {
-    const sortedMatrixIds = searchClosestCells(matrix, amount, id);
-    onSearchClosestCells(sortedMatrixIds);
+  const handleEnterMouse = (id) => {
+    const closestIds = searchClosestCells(dataMatrix, settings.cells, id);
+    dispatch(setClosestCellIds(closestIds));
   };
 
-  const increaseCellValByOne = (matrix, id) => {
-    const matrixWithIncreasedCellVal = increaseMatrixCellVal(matrix, id);
-    setNewMatrixData(matrixWithIncreasedCellVal);
+  const handleIncreaseCell = (id) => {
+    const newData = increaseMatrixCellVal(dataMatrix, id);
+    dispatch(setMatrix(newData));
   };
 
   const style = useMemo(() => {
@@ -35,17 +39,15 @@ const TableCell = ({
           data.value
         )}%,transparent 0%)`,
       };
-    if (closestCellsIds.includes(data.id)) return { background: "yellow" };
-  }, [isPercentageMode, closestCellsIds]);
+    if (closestCellIds.includes(data.id)) return { background: "yellow" };
+  }, [isPercentageMode, closestCellIds]);
 
   return (
     <td
       style={style}
-      onMouseEnter={() =>
-        handleEnterMouse(dataMatrix, closestCellsAmount, data.id)
-      }
-      onMouseLeave={() => onSearchClosestCells([])}
-      onClick={() => increaseCellValByOne(dataMatrix, data.id)}
+      onMouseEnter={() => handleEnterMouse(data.id)}
+      onMouseLeave={() => dispatch(setClosestCellIds([]))}
+      onClick={() => handleIncreaseCell(data.id)}
       className="blueCells"
     >
       {cellRender}
