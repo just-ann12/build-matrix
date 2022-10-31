@@ -1,35 +1,62 @@
 import CustomButton from "../shared/CustomButton";
 import "./index.scss";
-const Table = () => {
+import TableRow from "./TableRow";
+import RowAverageVal from "./RowAverageVal";
+import { nanoid } from "nanoid";
+
+const Table = ({
+  data,
+  setData,
+  closestCellsAmount,
+  onSearchClosestCells,
+  closestCellsIds,
+}) => {
+  const handleRowAdding = (row) => setData([...data, row]);
+  const setNewMatrixData = (data) => setData(data);
+
+  const addRow = (data) => {
+    const row = Array(data[0].length)
+      .fill(null)
+      .map(() => ({
+        id: nanoid(),
+        value: Math.round(100 - 0.5 + Math.random() * (1000 - 100 + 1)),
+      }));
+    handleRowAdding(row);
+  };
+
   return (
     <div className="matrix-wrap">
       <div className="btn-wrap">
         <CustomButton
           className="addRowBtn"
           title="Add row"
-          onClick={() => {}}
+          onClick={() => addRow(data)}
         />
       </div>
       <table className="matrix">
         <thead>
           <tr>
             <th>№</th>
-            <th>1</th>
+            {data[0].map((_head, index) => (
+              <th key={index}>{index + 1}</th>
+            ))}
             <th>Sum</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <th>1</th>
-            <th>100</th>
-            <th>100</th>
-            <th>X</th>
-          </tr>
-          <tr>
-            <th>Avg</th>
-            <th>100</th>
-            <th>100</th>
-          </tr>
+          {data.map((row, index) => (
+            <TableRow
+              dataMatrix={data}
+              row={row}
+              closestCellsAmount={closestCellsAmount}
+              key={index}
+              rowNumber={index + 1}
+              onSearchClosestCells={onSearchClosestCells}
+              closestCellsIds={closestCellsIds}
+              setNewMatrixData={setNewMatrixData}
+            />
+          ))}
+          <RowAverageVal data={data} />
         </tbody>
       </table>
     </div>
