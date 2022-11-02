@@ -1,16 +1,22 @@
 import { useDispatch, useSelector } from "react-redux";
 import CustomButton from "../shared/CustomButton";
-import "./index.scss";
-import TableRow from "./TableRow";
-import AverageRow from "./RowAverageVal";
+import CustomTableRow from "./TableRow";
+import AverageRow from "./AverageRow";
 import { addRow } from "../../store/matrix-reducer/actions";
 import {
   getMatrixDataSelector,
   getMatrixSettingsSelector,
 } from "../../store/matrix-reducer/selectors";
 import { newValue } from "../../utils/helpers/newValue";
+import {
+  Table,
+  TableBody,
+  TableHead,
+  TableRow,
+  TableCell,
+} from "@mui/material";
 
-const Table = () => {
+const CustomTable = () => {
   const dispatch = useDispatch();
 
   const settings = useSelector(getMatrixSettingsSelector);
@@ -22,33 +28,27 @@ const Table = () => {
   };
 
   return (
-    <div className="matrix-wrap">
-      <div className="btn-wrap">
-        <CustomButton
-          className="addRowBtn"
-          title="Add row"
-          onClick={handleAddRow}
-        />
-      </div>
-      <table className="matrix">
-        <thead>
-          <tr>
-            <th>№</th>
+    <>
+      <CustomButton variant="green" title="Add row" onClick={handleAddRow} />
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>№</TableCell>
             {data[0].map((_head, index) => (
-              <th key={index}>{index + 1}</th>
+              <TableCell key={index}>{index + 1}</TableCell>
             ))}
-            <th>Sum</th>
-          </tr>
-        </thead>
-        <tbody>
+            <TableCell>Sum</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
           {data.map((row, index) => (
-            <TableRow row={row} key={index} index={index} />
+            <CustomTableRow row={row} key={index} index={index} />
           ))}
           <AverageRow />
-        </tbody>
-      </table>
-    </div>
+        </TableBody>
+      </Table>
+    </>
   );
 };
 
-export default Table;
+export default CustomTable;

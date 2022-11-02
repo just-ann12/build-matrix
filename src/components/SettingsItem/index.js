@@ -1,9 +1,9 @@
 import CustomInput from "../shared/CustomInput";
-import "./index.scss";
+import styles from "./index.module.scss";
 
 const SettingsItem = ({ label, value, onChange }) => {
   return (
-    <div className="inputValues">
+    <div className={styles.wrapper}>
       <p>{label}</p>
       <CustomInput type="number" value={value} onChange={onChange} />
     </div>

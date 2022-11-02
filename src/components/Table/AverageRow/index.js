@@ -1,28 +1,27 @@
 import {
   getArraySum,
-  getValueArrFromObjsArr,
+  getArrValueFromObjsArr,
 } from "../../../utils/helpers/array";
-import "../index.scss";
 import { useSelector } from "react-redux";
 import { getMatrixDataSelector } from "../../../store/matrix-reducer/selectors";
+import { TableCell } from "@mui/material";
 
-const AverageRow = () => {
+const AverageRow = ({ className }) => {
   const data = useSelector(getMatrixDataSelector);
   const getAverageValueOfSumColumn = (data) => {
-    const matrix = data.map((row) => getValueArrFromObjsArr(row));
+    const matrix = data.map((row) => getArrValueFromObjsArr(row));
     const sumOfRows = matrix.map((row) => getArraySum(row));
     return Math.round(sumOfRows.reduce((a, b) => a + b, 0) / sumOfRows.length);
   };
 
   const getAverageValues = (data) => {
-    const matrix = data.map((row) => getValueArrFromObjsArr(row));
-    const sumOfColumn = [];
-    for (let i = 0; i < matrix.length; i++) {
-      for (let j = 0; j < matrix[i].length; j++) {
-        sumOfColumn[j] = (sumOfColumn[j] || 0) + matrix[i][j];
-      }
-    }
-    return sumOfColumn.map((val) => Math.round(val / sumOfColumn.length));
+    const matrix = data.map((row) => getArrValueFromObjsArr(row));
+    return matrix
+      .reduce((acc, current) => {
+        current.forEach((e, i) => (acc[i] = acc[i] ? acc[i] + e : e));
+        return acc;
+      }, [])
+      .map((e) => Math.round(e / matrix.length));
   };
 
   const avgValues = getAverageValues(data);
@@ -30,11 +29,11 @@ const AverageRow = () => {
 
   return (
     <tr>
-      <td>Avg</td>
+      <TableCell>Avg</TableCell>
       {avgValues.map((val) => (
-        <td className="greenCells">{val}</td>
+        <TableCell variant="green">{val}</TableCell>
       ))}
-      <td className="greenCells">{averageValueOfColumnSum}</td>
+      <TableCell variant="green">{averageValueOfColumnSum}</TableCell>
     </tr>
   );
 };
