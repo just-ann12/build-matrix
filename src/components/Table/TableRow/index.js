@@ -1,42 +1,22 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import {
   getArraySum,
   getValueArrFromObjsArr,
 } from "../../../utils/helpers/array";
 import DeleteBtn from "../../../utils/img/remove.png";
 import TableCell from "./TableCell";
+import { removeRow } from "../../../store/matrix-reducer/actions";
 
-const TableRow = ({
-  dataMatrix,
-  row,
-  rowNumber,
-  closestCellsAmount,
-  onSearchClosestCells,
-  closestCellsIds,
-  setNewMatrixData,
-}) => {
+const TableRow = ({ row, index }) => {
+  const dispatch = useDispatch();
   const [isPercentageMode, setPercentageMode] = useState(false);
-
-  const removeRow = (data, row) => {
-    data = data.splice(0);
-    data.splice(row - 1, 1);
-    setNewMatrixData(data);
-  };
 
   return (
     <tr>
-      <td>{rowNumber}</td>
+      <td>{index + 1}</td>
       {row.map((item) => (
-        <TableCell
-          dataMatrix={dataMatrix}
-          row={row}
-          data={item}
-          closestCellsAmount={closestCellsAmount}
-          onSearchClosestCells={onSearchClosestCells}
-          closestCellsIds={closestCellsIds}
-          isPercentageMode={isPercentageMode}
-          setNewMatrixData={setNewMatrixData}
-        />
+        <TableCell row={row} data={item} isPercentageMode={isPercentageMode} />
       ))}
 
       <td
@@ -49,7 +29,7 @@ const TableRow = ({
       <td className="deleteBtn">
         <button
           className="deleteTheRow"
-          onClick={() => removeRow(dataMatrix, row)}
+          onClick={() => dispatch(removeRow(index))}
         >
           <img src={DeleteBtn} />
         </button>

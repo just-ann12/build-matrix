@@ -3,8 +3,11 @@ import {
   getValueArrFromObjsArr,
 } from "../../../utils/helpers/array";
 import "../index.scss";
+import { useSelector } from "react-redux";
+import { getMatrixDataSelector } from "../../../store/matrix-reducer/selectors";
 
-const RowAverageVal = ({ data }) => {
+const AverageRow = () => {
+  const data = useSelector(getMatrixDataSelector);
   const getAverageValueOfSumColumn = (data) => {
     const matrix = data.map((row) => getValueArrFromObjsArr(row));
     const sumOfRows = matrix.map((row) => getArraySum(row));
@@ -36,4 +39,4 @@ const RowAverageVal = ({ data }) => {
   );
 };
 
-export default RowAverageVal;
+export default AverageRow;
