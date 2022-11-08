@@ -1,19 +1,23 @@
 import { useSelector } from "react-redux";
-import "./utils/styles/main.scss";
 import MatrixForm from "./components/MatrixForm";
-import Table from "./components/Table";
+import CustomTable from "./components/Table";
 import { getMatrixDataSelector } from "./store/matrix-reducer/selectors";
+import { ThemeProvider} from "@mui/material/styles";
+import theme from "./utils/theme/theme";
+import "./utils/styles/main.scss";
 
 const App = () => {
   const data = useSelector(getMatrixDataSelector);
 
   return (
-    <div className="App">
-      <div className="wrap">
-        <MatrixForm />
-        {!!data.length && <Table />}
+    <ThemeProvider theme={theme}>
+      <div className="App">
+        <div className="wrap">
+          <MatrixForm />
+          {!!data.length && <CustomTable />}
+        </div>
       </div>
-    </div>
+    </ThemeProvider>
   );
 };
 

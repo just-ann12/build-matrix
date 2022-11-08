@@ -10,7 +10,9 @@ import {
   getMatrixSettingsSelector,
 } from "../../../../store/matrix-reducer/selectors";
 import { setMatrix } from "../../../../store/matrix-reducer/actions";
-const TableCell = ({ data, row, isPercentageMode }) => {
+import { TableCell } from "@mui/material";
+
+const CustomTableCell = ({ data, row, isPercentageMode, className }) => {
   const dispatch = useDispatch();
 
   const settings = useSelector(getMatrixSettingsSelector);
@@ -26,15 +28,19 @@ const TableCell = ({ data, row, isPercentageMode }) => {
     dispatch(setClosestCellIds(closestIds));
   };
 
-  const handleIncreaseCell = (id) => {
-    const newData = increaseMatrixCellVal(dataMatrix, id);
-    dispatch(setMatrix(newData));
+  const handleIncreaseCell = (id, value) => {
+    if (value < 999) {
+      const newData = increaseMatrixCellVal(dataMatrix, id);
+      dispatch(setMatrix(newData));
+      const closestIds = searchClosestCells(dataMatrix, settings.cells, id);
+      dispatch(setClosestCellIds(closestIds));
+    }
   };
 
   const style = useMemo(() => {
     if (isPercentageMode)
       return {
-        backgroundImage: `linear-gradient(to top,red ${getCellPersentage(
+        background: `linear-gradient(to top,red ${getCellPersentage(
           row,
           data.value
         )}%,transparent 0%)`,
@@ -43,16 +49,16 @@ const TableCell = ({ data, row, isPercentageMode }) => {
   }, [isPercentageMode, closestCellIds]);
 
   return (
-    <td
+    <TableCell
+      variant="blue"
       style={style}
       onMouseEnter={() => handleEnterMouse(data.id)}
       onMouseLeave={() => dispatch(setClosestCellIds([]))}
-      onClick={() => handleIncreaseCell(data.id)}
-      className="blueCells"
+      onClick={() => handleIncreaseCell(data.id, data.value)}
     >
       {cellRender}
-    </td>
+    </TableCell>
   );
 };
 
-export default TableCell;
+export default CustomTableCell;

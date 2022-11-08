@@ -2,40 +2,46 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import {
   getArraySum,
-  getValueArrFromObjsArr,
+  getArrValueFromObjsArr,
 } from "../../../utils/helpers/array";
 import DeleteBtn from "../../../utils/img/remove.png";
-import TableCell from "./TableCell";
+import CustomTableCell from "./TableCell";
 import { removeRow } from "../../../store/matrix-reducer/actions";
+import styles from "./index.module.scss";
+import { TableRow, TableCell } from "@mui/material";
 
-const TableRow = ({ row, index }) => {
+const CustomTableRow = ({ row, index}) => {
   const dispatch = useDispatch();
   const [isPercentageMode, setPercentageMode] = useState(false);
 
   return (
-    <tr>
-      <td>{index + 1}</td>
+    <TableRow>
+      <TableCell>{index + 1}</TableCell>
       {row.map((item) => (
-        <TableCell row={row} data={item} isPercentageMode={isPercentageMode} />
+        <CustomTableCell
+          row={row}
+          data={item}
+          isPercentageMode={isPercentageMode}
+        />
       ))}
 
-      <td
-        className="greenCells"
+      <TableCell
+        variant="green"
         onMouseEnter={() => setPercentageMode(true)}
         onMouseLeave={() => setPercentageMode(false)}
       >
-        {getArraySum(getValueArrFromObjsArr(row))}
-      </td>
-      <td className="deleteBtn">
+        {getArraySum(getArrValueFromObjsArr(row))}
+      </TableCell>
+      <TableCell>
         <button
-          className="deleteTheRow"
+          className={styles.button_delete}
           onClick={() => dispatch(removeRow(index))}
         >
           <img src={DeleteBtn} />
         </button>
-      </td>
-    </tr>
+      </TableCell>
+    </TableRow>
   );
 };
 
-export default TableRow;
+export default CustomTableRow;
