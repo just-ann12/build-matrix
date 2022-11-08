@@ -1,50 +1,54 @@
-import "./index.scss";
-import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { nanoid } from "nanoid";
 import SettingsItem from "../SettingsItem";
 import CustomButton from "../shared/CustomButton";
+import { getMatrixSettingsSelector } from "../../store/matrix-reducer/selectors";
+import { setSettings, setMatrix } from "../../store/matrix-reducer/actions";
+import styles from "./index.module.scss";
 
 const MatrixForm = () => {
-  // create settings state with columns, rows, cells properties
+  const dispatch = useDispatch();
 
-  const [settings, setSettings] = useState({
-    columns: 0,
-    rows: 0,
-    cells: 0,
-  });
+  const settings = useSelector(getMatrixSettingsSelector);
+
+  const generateMatrix = (columns, rows) => {
+    const matrix = Array.from({ length: rows }, () =>
+      Array(columns)
+        .fill(null)
+        .map(() => Math.round(100 - 0.5 + Math.random() * (1000 - 100 + 1)))
+        .map((val) => ({ id: nanoid(), value: val }))
+    );
+    dispatch(setMatrix(matrix));
+  };
+  const handleChangeSettings = (field, value) => {
+    dispatch(setSettings({ ...settings, [field]: +value }));
+  };
+
   return (
-    <div className="matrixCreator">
-      <h1 className="title">Matrix builder</h1>
-      <form>
-        {/* move to new component SettingsItem  label onChange={(e) => setSettings({...settings, columns: e.target.value})}*/}
-        <div className="inputValues-wrap">
-          <SettingsItem
-            label="Set columns"
-            value={settings.columns}
-            onChange={(e) =>
-              setSettings({ ...settings, columns: e.target.value })
-            }
-          />
-          <SettingsItem
-            label="Set rows"
-            value={settings.rows}
-            onChange={(e) => setSettings({ ...settings, rows: e.target.value })}
-          />
-          <SettingsItem
-            label="Set cells"
-            value={settings.cells}
-            onChange={(e) =>
-              setSettings({ ...settings, cells: e.target.value })
-            }
-          />
-        </div>
-        <div className="btn-wrap">
-          <CustomButton
-            className="mainPageBtn"
-            title="Create matrix"
-            onClick={() => {}}
-          />
-        </div>
-      </form>
+    <div className={styles.wrapper}>
+      <h1 className={styles.title}>Matrix builder</h1>
+
+      <SettingsItem
+        label="Set columns"
+        value={settings.columns}
+        onChange={(e) => handleChangeSettings("columns", e.target.value)}
+      />
+      <SettingsItem
+        label="Set rows"
+        value={settings.rows}
+        onChange={(e) => handleChangeSettings("rows", e.target.value)}
+      />
+      <SettingsItem
+        label="Set cells"
+        value={settings.cells}
+        onChange={(e) => handleChangeSettings("cells", e.target.value)}
+      />
+      <CustomButton
+        variant="pink"
+        title="Create matrix"
+        onClick={() => generateMatrix(settings.columns, settings.rows)}
+      />
     </div>
   );
 };

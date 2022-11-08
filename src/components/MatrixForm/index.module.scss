@@ -1,0 +1,15 @@
+@import "../../utils/styles/colors.scss";
+
+.wrapper {
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+
+    .title {
+        text-align: center;
+        margin-bottom: 15px;
+        font-size: 60px;
+        color: $yellow;
+    }
+
+}
